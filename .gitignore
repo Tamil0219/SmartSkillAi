@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Uploaded files
+uploads/
+
+# Binaries & Large Files
+*.exe
+*.zip
+*.log
+handle_*.txt
+handle_output.txt
+query
+
+# Debug & Test Scripts
+backend/debug_*.js
+backend/test*.js
+backend/find*.js
+backend/clean*.js
+backend/verify*.js
+backend/reset*.js
+backend/seed*.js
+backend/setup-login.js

@@ -1,0 +1,47 @@
+:root {
+  --brand-bg: #050505;
+  --brand-sidebar: #0D0D0D;
+  --brand-card: #121212;
+  --brand-crystal: #00E5FF;
+  --brand-crystal-soft: rgba(0, 229, 255, 0.1);
+  --brand-crystal-strong: rgba(0, 229, 255, 0.4);
+  --brand-text: #FFFFFF;
+  --brand-text-secondary: #71717A;
+}
+
+/* Global Aesthetics */
+body {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Cyber Glow */
+.shadow-glow {
+  box-shadow: 0 0 30px rgba(0, 229, 255, 0.15);
+}
+
+.transition-premium {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ultra Frosted Glass */
+.glass-panel {
+  backdrop-filter: blur(25px) saturate(180%);
+  background: rgba(18, 18, 18, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 255, 0.2);
+}
