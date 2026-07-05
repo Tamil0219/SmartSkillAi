@@ -1,32 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-  LogOut, 
-  User, 
-  Search, 
-  ShieldCheck, 
-  Layers, 
+import {
+  LogOut,
+  User,
+  Search,
+  ShieldCheck,
+  Layers,
   GraduationCap,
-  Settings
+  Settings,
 } from "lucide-react";
 
 export default function Navbar({ onToggleSidebar }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("user")) || { name: "User", role: "guest" };
-  const profilePath = userData.role === 'admin'
-    ? '/admin/profile'
-    : userData.role === 'mentor'
-    ? '/mentor/profile'
+  const profilePath = userData.role === "admin"
+    ? "/admin/profile"
+    : userData.role === "mentor"
+    ? "/mentor/profile"
     : null;
-
-  const notifications = [
-    { id: 1, title: "New Exam Released", time: "2m ago", type: "info" },
-    { id: 2, title: "System Update Complete", time: "1h ago", type: "success" },
-    { id: 3, title: "Performance Alert", time: "5h ago", type: "warning" },
-  ];
 
   const handleLogout = () => {
     localStorage.clear();
@@ -34,66 +27,67 @@ export default function Navbar({ onToggleSidebar }) {
   };
 
   const getRoleIcon = () => {
-    switch(userData.role) {
-      case 'admin': return <ShieldCheck className="w-4 h-4 text-brand-crystal" />;
-      case 'mentor': return <Layers className="w-4 h-4 text-brand-crystal" />;
-      default: return <GraduationCap className="w-4 h-4 text-brand-crystal" />;
+    switch (userData.role) {
+      case "admin": return <ShieldCheck className="h-4 w-4 text-brand-cyan" />;
+      case "mentor": return <Layers className="h-4 w-4 text-brand-cyan" />;
+      default: return <GraduationCap className="h-4 w-4 text-brand-cyan" />;
     }
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between gap-6 bg-brand-background/80 px-8 backdrop-blur-xl border-b border-white/5">
-      <div className="flex flex-1 items-center gap-6">
+    <header className="sticky top-0 z-30 flex h-20 w-full items-center justify-between gap-4 border-b border-white/10 bg-brand-navbar/80 px-4 backdrop-blur-2xl md:px-8">
+      <div className="flex flex-1 items-center gap-4">
         <button
           type="button"
-          className="md:hidden flex flex-col gap-1.5 p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/5"
+          className="flex flex-col gap-1.5 rounded-2xl border border-white/10 bg-white/[0.04] p-2.5 transition-all hover:bg-white/[0.08] md:hidden"
           onClick={onToggleSidebar}
         >
-          <div className="h-0.5 w-6 bg-brand-crystal" />
-          <div className="h-0.5 w-4 bg-brand-crystal" />
-          <div className="h-0.5 w-6 bg-brand-crystal" />
+          <div className="h-0.5 w-6 bg-brand-cyan" />
+          <div className="h-0.5 w-4 bg-brand-cyan" />
+          <div className="h-0.5 w-6 bg-brand-cyan" />
         </button>
-        
-        <div className="relative w-full max-w-lg group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-text-secondary group-focus-within:text-brand-crystal transition-colors" />
+
+        <div className="group relative w-full max-w-xl">
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-text-secondary transition-colors group-focus-within:text-brand-cyan" />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search Intelligence System..."
-            className="w-full h-12 rounded-[1.25rem] border border-white/5 bg-white/5 pl-12 pr-4 text-sm font-medium text-white placeholder:text-brand-text-secondary placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-brand-crystal/30 focus:bg-white/10 transition-all"
+            placeholder="Search intelligence system..."
+            className="h-12 w-full rounded-[1.25rem] border border-white/10 bg-white/[0.05] pl-12 pr-4 text-sm font-medium text-white placeholder:text-brand-text-secondary/70 focus:outline-none focus:ring-2 focus:ring-brand-cyan/30 focus:bg-white/[0.08]"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3">
         {profilePath && (
           <button
             onClick={() => navigate(profilePath)}
-            className="hidden sm:flex items-center gap-2 rounded-[1.25rem] border border-white/5 bg-white/5 px-4 py-3 text-xs font-black uppercase tracking-widest text-brand-text-secondary hover:text-white hover:bg-white/[0.08] transition-all"
+            className="hidden items-center gap-2 rounded-[1.25rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-brand-text-secondary transition-all hover:border-brand-cyan/30 hover:bg-brand-cyan/10 hover:text-white sm:flex"
           >
-            <Settings className="w-4 h-4 text-brand-crystal" />
+            <Settings className="h-4 w-4 text-brand-cyan" />
             Profile
           </button>
         )}
-        <div className="hidden lg:flex items-center gap-4 py-1.5 pl-1.5 pr-4 rounded-[1.25rem] bg-white/5 border border-white/5">
-          <div className="h-10 w-10 overflow-hidden rounded-xl bg-brand-crystal/10 flex items-center justify-center border border-brand-crystal/20">
-            <User className="w-5 h-5 text-brand-crystal" />
+
+        <div className="hidden items-center gap-3 rounded-[1.25rem] border border-white/10 bg-white/[0.05] px-3 py-2 lg:flex">
+          <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-brand-cyan/20 bg-brand-cyan/10">
+            <User className="h-5 w-5 text-brand-cyan" />
           </div>
           <div className="flex flex-col">
-            <p className="text-sm font-black text-white tracking-tight leading-none mb-1">{userData.name}</p>
-            <div className="flex items-center gap-1.5 grayscale opacity-70">
+            <p className="text-sm font-semibold leading-none text-white">{userData.name}</p>
+            <div className="mt-1 flex items-center gap-1.5">
               {getRoleIcon()}
-              <span className="text-[10px] font-black uppercase tracking-widest text-brand-text-secondary">{userData.role}</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-text-secondary">{userData.role}</span>
             </div>
           </div>
         </div>
 
         <button
           onClick={handleLogout}
-          className="flex h-12 items-center gap-2 rounded-[1.25rem] bg-brand-crystal/10 px-6 text-sm font-bold text-brand-crystal border border-brand-crystal/30 hover:bg-brand-crystal/20 transition-all active:scale-95"
+          className="flex h-12 items-center gap-2 rounded-[1.25rem] border border-brand-cyan/25 bg-gradient-to-r from-[#6D5BFF] to-[#1DA1FF] px-5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(29,161,255,0.25)] transition-all hover:scale-[1.02] active:scale-[0.98]"
         >
-          <LogOut className="w-4 h-4" />
-          <span className="hidden sm:inline">EXIT SYSTEM</span>
+          <LogOut className="h-4 w-4" />
+          <span className="hidden sm:inline">Exit</span>
         </button>
       </div>
     </header>
