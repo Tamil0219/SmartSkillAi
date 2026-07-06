@@ -1,12 +1,31 @@
 import axios from "axios";
 
+// Determine API URL based on environment
+const getApiUrl = () => {
+  // Use the Vite-injected global API URL first (build-time default)
+  if (typeof __API_URL__ !== 'undefined' && __API_URL__) {
+    return __API_URL__;
+  }
+
+  // Fallback to the Vite environment variable if available
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+
+  // Use the deployed backend URL as the final fallback
+  return 'https://smartskill-ai-3.onrender.com/api';
+};
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: getApiUrl(),
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
 });
+
+// Log API URL for debugging
+console.log('🔗 API Base URL:', getApiUrl());
 
 // Attach token automatically
 API.interceptors.request.use((config) => {
@@ -46,7 +65,10 @@ if (err.response) {
   }
 } else if (err.request) {
   // Network error (no response received)
-  console.error("Network error: Unable to reach server. Check backend server status, network, and CORS settings.");
+  console.error("❌ Network error: Unable to reach server.", {
+    url: err.config?.baseURL,
+    details: "Check backend server status, network connectivity, and CORS settings."
+  });
 } else {
   // Other error
   console.error("Request error:", err.message);

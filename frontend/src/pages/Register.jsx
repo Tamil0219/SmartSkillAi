@@ -8,7 +8,8 @@ import {
   Shield, 
   ArrowRight, 
   Activity,
-  Zap
+  Zap,
+  ChevronDown
 } from "lucide-react";
 
 export default function Register() {
@@ -52,6 +53,7 @@ export default function Register() {
     } catch (error) {
       const message = error?.response?.data?.message || "Registration sequence failed.";
       setError(message);
+      console.error("Registration error:", error);
     } finally {
       setLoading(false);
     }
@@ -95,14 +97,14 @@ export default function Register() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-brand-text-secondary ml-1">Comms Hub</label>
+                <label className="text-[10px] font-black uppercase tracking-widest text-brand-text-secondary ml-1">Email Address</label>
                 <div className="relative group">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-text-secondary group-focus-within:text-brand-crystal transition-colors" />
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
-                    placeholder="Node Link"
+                    placeholder="name@example.com"
                     className="w-full h-12 rounded-xl border border-white/5 bg-white/5 pl-12 pr-4 text-xs font-medium text-white placeholder:text-brand-text-secondary/50 focus:outline-none focus:ring-2 focus:ring-brand-crystal/30 focus:bg-white/10 transition-all"
                     required
                   />
@@ -138,11 +140,19 @@ export default function Register() {
                 )}
               </div>
 
-              <input type="hidden" name="role" value={role} />
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-widest text-brand-text-secondary ml-1">Access Level</label>
-                <div className="px-4 py-3 rounded-xl border border-white/5 bg-white/5 text-xs font-medium text-brand-crystal">
-                  ADMIN PROTOCOL (default)
+                <div className="relative">
+                  <select
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-full h-12 rounded-xl border border-white/5 bg-white/5 px-4 pr-10 text-xs font-medium text-brand-crystal focus:outline-none focus:ring-2 focus:ring-brand-crystal/30 focus:bg-white/10 transition-all appearance-none cursor-pointer"
+                  >
+                    <option value="admin">ADMIN PROTOCOL</option>
+                    <option value="mentor">MENTOR PROTOCOL</option>
+                    <option value="student">STUDENT PROTOCOL</option>
+                  </select>
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-crystal pointer-events-none" />
                 </div>
               </div>
             </div>

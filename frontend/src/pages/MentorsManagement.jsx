@@ -144,7 +144,9 @@ export default function MentorsManagement() {
           <p className="text-sm text-brand-text-secondary">Manage mentors in your learning system</p>
         </div>
         <button
-          onClick={() => {
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
             resetForm();
             setIsModalOpen(true);
           }}
@@ -188,12 +190,14 @@ export default function MentorsManagement() {
                     <td className="px-6 py-4 text-brand-text-secondary">{mentor.email}</td>
                     <td className="px-6 py-4 flex gap-2">
                       <button
+                        type="button"
                         onClick={() => handleEdit(mentor)}
                         className="px-3 py-1 text-sm bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition"
                       >
                         Edit
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(mentor._id)}
                         className="px-3 py-1 text-sm bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition"
                       >

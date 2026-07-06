@@ -3,6 +3,12 @@ import { useState } from "react";
 export default function Modal({ title, isOpen, onClose, onSubmit, children, error, loading }) {
   if (!isOpen) return null;
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (onSubmit) onSubmit(e);
+  };
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-brand-card border border-white/10 rounded-2xl p-8 max-w-md w-full shadow-glow">
@@ -23,7 +29,7 @@ export default function Modal({ title, isOpen, onClose, onSubmit, children, erro
           </div>
         )}
         
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           {children}
           
           <div className="flex gap-3 mt-8">
@@ -36,7 +42,14 @@ export default function Modal({ title, isOpen, onClose, onSubmit, children, erro
               Cancel
             </button>
             <button
-              type="submit"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (typeof onSubmit === 'function') {
+                  onSubmit(e);
+                }
+              }}
               disabled={loading}
               className="flex-1 px-4 py-2 rounded-lg bg-brand-crystal text-black font-semibold hover:bg-brand-crystal/90 transition disabled:opacity-50"
             >

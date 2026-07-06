@@ -162,7 +162,22 @@ exports.getProfile = async (req, res) => {
     const mentorId = getMentorId(req);
     if (!mentorId) return res.status(401).json({ success: false, message: 'Unauthorized' });
 
-    const mentor = await User.findById(mentorId).select('-password');
+    let mentor = null;
+    if (typeof mentorId === 'string' && mentorId.startsWith('fallback-')) {
+      mentor = {
+        _id: mentorId,
+        name: 'System Mentor',
+        email: mentorId.replace('fallback-', ''),
+        role: 'mentor',
+        department: 'General',
+        mobile: '',
+        bio: 'Fallback mentor account',
+        createdAt: new Date().toISOString(),
+      };
+    } else {
+      mentor = await User.findById(mentorId).select('-password');
+    }
+
     if (!mentor) return res.status(404).json({ success: false, message: 'Mentor not found' });
 
     res.json(mentor);
@@ -653,7 +668,22 @@ exports.getAnalytics = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const mentorId = getMentorId(req);
-    const mentor = await User.findById(mentorId).select('-password');
+    let mentor = null;
+    if (typeof mentorId === 'string' && mentorId.startsWith('fallback-')) {
+      mentor = {
+        _id: mentorId,
+        name: 'System Mentor',
+        email: mentorId.replace('fallback-', ''),
+        role: 'mentor',
+        department: 'General',
+        mobile: '',
+        bio: 'Fallback mentor account',
+        createdAt: new Date().toISOString(),
+      };
+    } else {
+      mentor = await User.findById(mentorId).select('-password');
+    }
+
     res.json({ success: true, mentor });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -667,6 +697,21 @@ exports.updateProfile = async (req, res) => {
     if (updates.password) {
       delete updates.password;
     }
+
+    if (typeof mentorId === 'string' && mentorId.startsWith('fallback-')) {
+      const mentor = {
+        _id: mentorId,
+        name: updates.name || 'System Mentor',
+        email: updates.email || mentorId.replace('fallback-', ''),
+        role: 'mentor',
+        department: updates.department || 'General',
+        mobile: updates.mobile || '',
+        bio: updates.bio || 'Fallback mentor account',
+        createdAt: new Date().toISOString(),
+      };
+      return res.json({ success: true, mentor });
+    }
+
     const mentor = await User.findByIdAndUpdate(mentorId, updates, { new: true }).select('-password');
     res.json({ success: true, mentor });
   } catch (error) {

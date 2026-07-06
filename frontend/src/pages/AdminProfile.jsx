@@ -34,7 +34,8 @@ export default function AdminProfile() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e) => {
+    if (e) e.preventDefault();
     setSaving(true);
     try {
       const res = await API.put('/admin/profile', {
@@ -103,7 +104,11 @@ export default function AdminProfile() {
           </div>
           {!isEditing ? (
             <button
-              onClick={() => setIsEditing(true)}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsEditing(true);
+              }}
               className="flex items-center gap-2 px-4 py-2 bg-brand-crystal text-black font-bold rounded-xl hover:bg-brand-crystal/90 transition-colors"
             >
               <Edit2 className="w-4 h-4" />
@@ -207,6 +212,7 @@ export default function AdminProfile() {
         {isEditing && (
           <div className="flex flex-col gap-4 mt-8 md:flex-row">
             <button
+              type="button"
               onClick={handleSave}
               disabled={saving}
               className="flex items-center justify-center gap-2 px-6 py-3 bg-green-500/20 text-green-400 font-bold rounded-xl hover:bg-green-500/30 transition-colors disabled:opacity-50"
@@ -215,7 +221,9 @@ export default function AdminProfile() {
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
             <button
-              onClick={() => {
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
                 setFormData(profile);
                 setIsEditing(false);
               }}

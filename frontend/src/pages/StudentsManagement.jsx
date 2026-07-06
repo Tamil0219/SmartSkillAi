@@ -185,7 +185,9 @@ export default function StudentsManagement() {
           <p className="text-sm text-brand-text-secondary">Manage students in your learning system</p>
         </div>
         <button
-          onClick={() => {
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
             resetForm();
             setIsModalOpen(true);
           }}
@@ -242,12 +244,14 @@ export default function StudentsManagement() {
                       </td>
                       <td className="px-6 py-4 flex gap-2">
                         <button
+                          type="button"
                           onClick={() => handleEdit(student)}
                           className="px-3 py-1 text-sm bg-blue-500/20 text-blue-300 rounded hover:bg-blue-500/30 transition"
                         >
                           Edit
                         </button>
                         <button
+                          type="button"
                           onClick={() => handleDelete(student._id)}
                           className="px-3 py-1 text-sm bg-red-500/20 text-red-300 rounded hover:bg-red-500/30 transition"
                         >

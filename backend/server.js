@@ -8,34 +8,49 @@ const bcrypt = require("bcryptjs");
 const User = require("./models/User");
 
 const app = express();
+app.locals.dbReady = false;
 
 // ✅ Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ✅ CORS CONFIG (FIXED)
+// ✅ CORS CONFIG (FIXED) - Support both development and production
 const allowedOrigins = [
-  process.env.CLIENT_URL || "http://localhost:3000",
+  // Environment variable (for deployed environments)
+  process.env.CLIENT_URL,
+  // Common local development URLs
+  "http://localhost:3000",
   "http://localhost:5173",
   "http://localhost:3001",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:3001",
-];
+  // Development mode - allow all origins
+  ...(process.env.NODE_ENV === 'development' ? ['*'] : []),
+].filter(Boolean); // Remove undefined values
 
 app.use(
   cors({
     origin: function (origin, callback) {
+      // Allow requests without origin (like mobile apps, curl requests)
       if (!origin) {
         callback(null, true);
         return;
       }
 
       const normalizedOrigin = origin.replace(/\/$/, "");
+      
+      // In development, allow all origins
+      if (process.env.NODE_ENV === 'development') {
+        callback(null, true);
+        return;
+      }
+
+      // Check if origin is allowed
       if (
         allowedOrigins.includes(normalizedOrigin) ||
-        /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(normalizedOrigin)
+        /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(normalizedOrigin)
       ) {
         callback(null, true);
       } else {
@@ -52,6 +67,10 @@ app.use(
 // ✅ Create Default Admin
 async function createDefaultAdmin() {
   try {
+    if (mongoose.connection.readyState !== 1) {
+      return;
+    }
+
     const existingAdmin = await User.findOne({
       email: "admin@skillmatrix.ai",
     });
@@ -132,6 +151,7 @@ mongoose
   )
   .then(async () => {
     console.log("MongoDB Connected");
+    app.locals.dbReady = true;
 
     await createDefaultAdmin();
 
@@ -141,7 +161,11 @@ mongoose
   })
   .catch((err) => {
     console.error("MongoDB Error:", err);
-    process.exit(1);
+    app.locals.dbReady = false;
+    console.warn("Starting backend in fallback mode without MongoDB. Default admin login remains available.");
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT} (fallback mode)`);
+    });
   });
 
 // ✅ Handle crashes (VERY IMPORTANT)
