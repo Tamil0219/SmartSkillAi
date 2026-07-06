@@ -16,9 +16,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ CORS CONFIG (FIXED) - Support both development and production
+const FRONTEND_URL = process.env.CLIENT_URL || "https://smart-skill-ai.vercel.app";
 const allowedOrigins = [
-  // Environment variable (for deployed environments)
-  process.env.CLIENT_URL,
+  FRONTEND_URL,
   // Common local development URLs
   "http://localhost:3000",
   "http://localhost:5173",
@@ -30,39 +30,40 @@ const allowedOrigins = [
   ...(process.env.NODE_ENV === 'development' ? ['*'] : []),
 ].filter(Boolean); // Remove undefined values
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests without origin (like mobile apps, curl requests)
-      if (!origin) {
-        callback(null, true);
-        return;
-      }
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests without origin (like mobile apps, curl requests)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
 
-      const normalizedOrigin = origin.replace(/\/$/, "");
-      
-      // In development, allow all origins
-      if (process.env.NODE_ENV === 'development') {
-        callback(null, true);
-        return;
-      }
+    const normalizedOrigin = origin.replace(/\/$/, "");
+    
+    // In development, allow all origins
+    if (process.env.NODE_ENV === 'development') {
+      callback(null, true);
+      return;
+    }
 
-      // Check if origin is allowed
-      if (
-        allowedOrigins.includes(normalizedOrigin) ||
-        /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(normalizedOrigin)
-      ) {
-        callback(null, true);
-      } else {
-        console.error("❌ CORS Error - Origin not allowed:", origin);
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+    // Check if origin is allowed
+    if (
+      allowedOrigins.includes(normalizedOrigin) ||
+      /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(normalizedOrigin)
+    ) {
+      callback(null, true);
+    } else {
+      console.error("❌ CORS Error - Origin not allowed:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 // ✅ Create Default Admin
 async function createDefaultAdmin() {
@@ -104,6 +105,7 @@ const authRoutes = require("./routes/auth");
 const aiRoutes = require("./routes/ai");
 
 app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes); // Support frontend calls that omit the /api prefix
 app.use("/api/admin", adminRoutes);
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/student", studentRoutes);
@@ -143,12 +145,10 @@ app.use((req, res) => {
 
 // ✅ Start server AFTER DB connect
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/smartevalai";
 
 mongoose
-  .connect(
-    process.env.MONGODB_URI ||
-      "mongodb://127.0.0.1:27017/smartevalai"
-  )
+  .connect(MONGO_URI)
   .then(async () => {
     console.log("MongoDB Connected");
     app.locals.dbReady = true;
