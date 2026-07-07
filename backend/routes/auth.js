@@ -5,7 +5,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || "smarteval_jwt_secret_key_2025";
+const JWT_SECRET = process.env.JWT_SECRET || "3a025059ba0750fd3ef087bce795e9cdb8f3e23cc860a4f9282aea7a5f4370831ff67a590f9a7e799b6630386057db06cdf0468ec761b3f0ef69a93d6108fac0";
 const FALLBACK_ADMIN = {
   _id: "fallback-admin",
   name: "System Admin",
