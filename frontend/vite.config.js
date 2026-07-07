@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(({ mode }) => {
   // Load .env files for the current mode and make VITE_API_URL available
   const env = loadEnv(mode, cwd())
-  const apiUrl = env.VITE_API_URL || 'https://smartskill-ai-3.onrender.com/api'
+  const apiUrl = env.VITE_API_URL || 'https://smartskill-ai-3.onrender.com'
 
   return {
     plugins: [react()],

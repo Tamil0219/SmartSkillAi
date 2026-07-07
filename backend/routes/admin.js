@@ -28,6 +28,9 @@ router.post('/students/:studentId/marks', adminController.addStudentMarks);
 // ✅ ANALYTICS ROUTES
 router.get('/analytics', adminController.getPerformanceAnalytics);
 
+// ✅ COURSES ROUTES
+router.get('/courses', adminController.getCourses);
+
 // ✅ PROFILE ROUTES
 router.get('/profile', adminController.getProfile);
 router.put('/profile', adminController.updateProfile);

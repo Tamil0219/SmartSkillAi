@@ -1,19 +1,24 @@
 import axios from "axios";
 
 // Determine API URL based on environment
+const normalizeApiUrl = (rawUrl) => {
+  const url = String(rawUrl || 'https://smartskillai.onrender.com').trim().replace(/\/$/, '');
+  return url.endsWith('/api') ? url : `${url}/api`;
+};
+
 const getApiUrl = () => {
   // Use the Vite-injected global API URL first (build-time default)
   if (typeof __API_URL__ !== 'undefined' && __API_URL__) {
-    return __API_URL__;
+    return normalizeApiUrl(__API_URL__);
   }
 
   // Fallback to the Vite environment variable if available
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+    return normalizeApiUrl(import.meta.env.VITE_API_URL);
   }
 
   // Use the deployed backend URL as the final fallback
-  return 'https://smartskill-ai-3.onrender.com/api';
+  return normalizeApiUrl('https://smartskillai.onrender.com');
 };
 
 const API = axios.create({

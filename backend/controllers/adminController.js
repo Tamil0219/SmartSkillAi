@@ -510,6 +510,33 @@ exports.getPerformanceAnalytics = async (req, res) => {
   }
 };
 
+// ✅ GET ADMIN COURSES
+exports.getCourses = async (req, res) => {
+  try {
+    if (!req.user || req.user.role !== "admin") {
+      return res.status(403).json({ success: false, message: "Access denied - Admin only" });
+    }
+
+    // Get mentors created by this admin
+    const adminMentors = await User.find({ role: 'mentor', adminId: req.user.id }, '_id');
+    const mentorIds = adminMentors.map(m => m._id);
+
+    // Get courses by those mentors
+    const courses = await Course.find({ mentorId: { $in: mentorIds } });
+    const coursesWithData = await Promise.all(courses.map(async (course) => {
+      const mentor = await User.findById(course.mentorId);
+      return {
+        ...course.toObject(),
+        mentorName: mentor ? mentor.name : 'Unknown',
+      };
+    }));
+    res.json({ success: true, courses: coursesWithData });
+  } catch (error) {
+    console.error('❌ Error fetching admin courses:', error.message);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // ✅ ADD MARKS TO STUDENT
 exports.addStudentMarks = async (req, res) => {
   try {

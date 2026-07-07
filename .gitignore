@@ -1,42 +1,93 @@
-# Dependencies
-node_modules/
-package-lock.json
+# ============================================================
+# SmartSkill-AI — Root .gitignore
+# Covers: React/Vite frontend + Node.js/Express backend
+# ============================================================
 
-# Environment variables
+# ── Dependencies ────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Lock files (regenerated on install — not needed in repo) ─
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ── Environment variables ────────────────────────────────────
 .env
 .env.local
-.env.production
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
-# Build outputs
+# ── Build outputs ────────────────────────────────────────────
 dist/
 build/
 .vite/
+out/
 
-# IDE & Editor
+# ── Test coverage ────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── Logs ────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── OS / system files ────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IDE and editor directories ───────────────────────────────
 .vscode/
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 *.swp
 *.swo
 
-# OS files
-Thumbs.db
-.DS_Store
+# ── AI / Kiro / Gemini tool directories ─────────────────────
+.kiro/
+.gemini/
 
-# Uploaded files
-uploads/
+# ── Uploaded user files (runtime-generated) ─────────────────
+backend/uploads/
 
-# Binaries & Large Files
-*.exe
-*.zip
-*.log
+# ── Temporary / local-only scripts ──────────────────────────
+powershell.bat
+push_project.bat
+fix-lint.cjs
+Eula.txt
+
+# ── Sysinternals / tool output files ────────────────────────
 handle_*.txt
 handle_output.txt
 query
 
-# Debug & Test Scripts
+# ── Binaries and archives ────────────────────────────────────
+*.exe
+*.zip
+*.tar.gz
+*.rar
+
+# ── Debug / one-off backend scripts ─────────────────────────
 backend/debug_*.js
 backend/test*.js
 backend/find*.js

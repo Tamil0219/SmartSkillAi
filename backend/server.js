@@ -26,8 +26,6 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://127.0.0.1:5173",
   "http://127.0.0.1:3001",
-  // Development mode - allow all origins
-  ...(process.env.NODE_ENV === 'development' ? ['*'] : []),
 ].filter(Boolean); // Remove undefined values
 
 const corsOptions = {
@@ -39,16 +37,20 @@ const corsOptions = {
     }
 
     const normalizedOrigin = origin.replace(/\/$/, "");
-    
+
     // In development, allow all origins
     if (process.env.NODE_ENV === 'development') {
       callback(null, true);
       return;
     }
 
+    // Allow any Vercel preview/production deployment for this project
+    const isVercelPreview = /^https:\/\/smart-skill-ai(-[a-z0-9]+-[a-z0-9]+)?\.vercel\.app$/.test(normalizedOrigin);
+
     // Check if origin is allowed
     if (
       allowedOrigins.includes(normalizedOrigin) ||
+      isVercelPreview ||
       /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/.test(normalizedOrigin)
     ) {
       callback(null, true);
@@ -97,7 +99,6 @@ async function createDefaultAdmin() {
 }
 
 // ✅ Routes
-const dashboardRoutes = require("./routes/dashboard");
 const adminRoutes = require("./routes/admin");
 const mentorRoutes = require("./routes/mentor");
 const studentRoutes = require("./routes/student");
@@ -110,7 +111,6 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/mentor", mentorRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/ai", aiRoutes);
-app.use("/api", dashboardRoutes);
 
 // ✅ Root route
 app.get("/", (req, res) => {

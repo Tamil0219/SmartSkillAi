@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SmartSkill-AI 🚀
 ### Intelligent Learning & Adaptive Evaluation Ecosystem
 
@@ -76,7 +75,3 @@ npm run dev # Runs at http://localhost:3000
 ---
 
 *Crafted with precision for the SmartSkill-AI Ecosystem.*
-
-=======
-# SmartSkillAi
->>>>>>> f01fd0329eabf0d683c49487f58b4d6874bfee82
