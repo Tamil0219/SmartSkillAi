@@ -106,7 +106,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-async function registerUser({ name, email, password, role = "admin", isDbReady = mongoose.connection.readyState === 1 }) {
+async function registerUser({ name, email, password, role = "admin", adminId = null, isDbReady = mongoose.connection.readyState === 1 }) {
   const validRoles = ["admin", "mentor", "student"];
   const userRole = role && validRoles.includes(role) ? role : "admin";
 
@@ -165,6 +165,7 @@ async function registerUser({ name, email, password, role = "admin", isDbReady =
     email: email.trim().toLowerCase(),
     password: hashedPassword,
     role: userRole,
+    ...(adminId ? { adminId } : {}),
   });
 
   const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1d" });
@@ -190,6 +191,7 @@ router.post("/register", async (req, res) => {
       email: req.body?.email,
       password: req.body?.password,
       role: req.body?.role,
+      adminId: req.body?.adminId || null,
       isDbReady: mongoose.connection.readyState === 1,
     });
 

@@ -32,6 +32,14 @@ export default function Register() {
       return;
     }
 
+    // Client-side password validation — mirrors backend regex exactly
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError("Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character (@$!%*?&).");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await API.post("/auth/register", {
         name,
@@ -41,6 +49,7 @@ export default function Register() {
       });
 
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("role", response.data.user.role);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
       const userRole = response.data.user.role;
