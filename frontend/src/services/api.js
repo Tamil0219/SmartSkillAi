@@ -23,7 +23,6 @@ const getApiUrl = () => {
 
 const API = axios.create({
   baseURL: getApiUrl(),
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }

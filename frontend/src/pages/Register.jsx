@@ -5,7 +5,6 @@ import {
   User, 
   Mail, 
   Lock, 
-  Shield, 
   ArrowRight, 
   Activity,
   Zap,
@@ -158,11 +157,12 @@ export default function Register() {
                     className="w-full h-12 rounded-xl border border-white/5 bg-white/5 px-4 pr-10 text-xs font-medium text-brand-crystal focus:outline-none focus:ring-2 focus:ring-brand-crystal/30 focus:bg-white/10 transition-all appearance-none cursor-pointer"
                   >
                     <option value="admin">ADMIN PROTOCOL</option>
-                    <option value="mentor">MENTOR PROTOCOL</option>
-                    <option value="student">STUDENT PROTOCOL</option>
                   </select>
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-crystal pointer-events-none" />
                 </div>
+                <p className="text-[9px] text-brand-text-secondary ml-1 leading-relaxed">
+                  Mentors &amp; students are created by an admin after login.
+                </p>
               </div>
             </div>
 
